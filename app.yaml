@@ -1,0 +1,48 @@
+application: webalx-170215
+version: 3
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: jinja2
+  version: "2.6"
+
+handlers:
+
+# specify proper mimetypes to avoid bad serving
+
+- url: /(.*\.otf)
+  mime_type: font/opentype
+  static_files: static/\1
+  upload: static/(.*\.otf)
+
+- url: /static/(.*\.woff)
+  mime_type: application/x-font-woff
+  static_files: static/\1
+  upload: static/(.*\.woff)
+
+- url: /static/(.*\.ttf)
+  mime_type: application/font-sfnt
+  static_files: static/\1
+  upload: static/(.*\.ttf)
+
+- url: /static/(.*\.(svg|svgz))
+  static_files: static/\1
+  upload: static/(.*\.(svg|svgz))
+  http_headers:
+    content-type: image/svg+xml
+
+- url: /static/(.*\.eot)
+  mime_type: application/vnd.ms-fontobject
+  static_files: static/\1
+  upload: static/(.*\.eot)
+
+- url: /static/
+  static_dir: static
+
+- url: /.*
+  script: app.wsgi
+
